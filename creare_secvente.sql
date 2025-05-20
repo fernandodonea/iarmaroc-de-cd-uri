@@ -1,3 +1,5 @@
+--ex 10--
+
 ----crearea secventelor----
 
 --secventa utilizator--
@@ -7,12 +9,18 @@ INCREMENT BY 1
 NOCACHE
 NOCYCLE;
 
---secventa comenda--
+
+
+
+--secventa comanda--
 CREATE SEQUENCE seq_comanda
 START WITH 1000
 INCREMENT BY 1
 NOCACHE
 NOCYCLE;
+
+
+
 
 --secventa cd personalizat--
 CREATE SEQUENCE seq_cd_pers
@@ -21,12 +29,16 @@ INCREMENT BY 1
 NOCACHE
 NOCYCLE;
 
---secventa playlisy--
+
+
+--secventa playlist--
 CREATE SEQUENCE seq_playlist
 START WITH 1
 INCREMENT BY 1
 NOCACHE
 NOCYCLE;
+
+
 
 --secventa recenzie--
 CREATE SEQUENCE seq_recenzie
@@ -36,3 +48,10 @@ NOCACHE
 NOCYCLE;
 
 
+
+
+drop sequence seq_utilizator;
+drop sequence seq_comanda;
+drop sequence seq_cd_pers;
+drop sequence seq_playlist;
+drop sequence seq_recenzie;
