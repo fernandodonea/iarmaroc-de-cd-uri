@@ -4,8 +4,11 @@
     <file url="file://$PROJECT_DIR$/creare_secvente.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/creare_tabele_asociative.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/creare_tabele_principale.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/insert-loialitate.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/insert-recenzie.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/insert_album.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/insert_artist.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/insert_cd-pers.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/insert_genmus.sql" dialect="Oracle" />
     <file url="file://$PROJECT_DIR$/insert_utilizator.sql" dialect="Oracle" />
     <file url="PROJECT" dialect="MySQL" />
