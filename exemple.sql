@@ -276,16 +276,26 @@ LEFT JOIN recenzie r ON u.utilizator_id = r.utilizator_id
 GROUP BY u.utilizator_id, u.nume, u.prenume, u.email, u.oras, u.judet,
          l.nivel, l.puncte;
 
+
+
+
+
+
+
+
+
+
 --operatie permisa
 SELECT nume_complet, nivel_loialitate, numar_comenzi, valoare_totala_comenzi
 FROM vizualizare_utilizatori_completa;
+
+
+
 
 --operatie nepermisa
 UPDATE vizualizare_utilizatori_completa
 SET nivel_loialitate = 'Platina'
 WHERE utilizator_id = 1;
-
-
 
 
 
@@ -344,25 +354,19 @@ AND NOT EXISTS (
 
 -- Top 3 albume cu cele mai mari vanzari
 
-SELECT * FROM (
+SELECT album_id, titlu, artist, total_vandut
+FROM (
     SELECT
         alb.album_id,
         alb.titlu,
         art.nume AS artist,
-        alb.pret,
-        SUM(ca.cantitate) AS total_vandut,
-        COUNT(DISTINCT ca.comanda_id) AS numar_comenzi_diferite,
-        RANK() OVER (ORDER BY SUM(ca.cantitate) DESC) AS ranking_vanzari
+        SUM(ca.cantitate) AS total_vandut
     FROM album alb
     JOIN artist art ON alb.artist_id = art.artist_id
     JOIN comanda_albume ca ON alb.album_id = ca.album_id
-    JOIN comanda c ON ca.comanda_id = c.comanda_id
-    WHERE c.status IN ('Livrata', 'Expediata', 'Procesata')  --excludem cmenzile anulate
-    GROUP BY alb.album_id, alb.titlu, art.nume, alb.pret
-    ORDER BY total_vandut DESC
+    GROUP BY alb.album_id, alb.titlu, art.nume
+    ORDER BY SUM(ca.cantitate) DESC
 )
 WHERE ROWNUM <= 3;
-
-
 
 
