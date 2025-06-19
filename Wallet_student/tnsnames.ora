@@ -1,0 +1,12 @@
+student_high = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=gee20f022e663aa_student_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+student_low = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=gee20f022e663aa_student_low.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+student_medium = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=gee20f022e663aa_student_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+student_tp = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=gee20f022e663aa_student_tp.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+student_tpurgent = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=gee20f022e663aa_student_tpurgent.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+
+
