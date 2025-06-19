@@ -157,9 +157,7 @@ ORDER BY e.data, ap.rating_mediu DESC;
 
 
 
-
-
---------------------------- ex 13--------------------------------
+---------------------------ex 13--------------------------------
 
 --------------------------- Operatia 1--------------------------------
 
@@ -184,7 +182,7 @@ WHERE EXISTS (
 
 
 
---------------------------- Operatia 2--------------------------------
+---------------------------Operatia 2--------------------------------
 
 --Actualizarea nivelului de loialitate pentru utilizatori
 
@@ -213,7 +211,7 @@ WHERE EXISTS (
 
 
 
---------------------------- Operatia 3--------------------------------
+---------------------------Operatia 3--------------------------------
 
 -- stergerea melodiilor din CD-urile personalizate pentru care durata totala depaseste un anumit prag
 
@@ -249,7 +247,7 @@ AND ROWNUM = 1;
 
 
 
---------------------------- ex 14--------------------------------
+---------------------------ex 14--------------------------------
 
 -- Crearea unei unei vizualizari complexe care afiseaza informatii despre
 -- utilizatori, comenzile lorsi albumele din wishlist
@@ -292,7 +290,7 @@ WHERE utilizator_id = 1;
 
 
 
---------------------------- EXERCIȚIUL 15 --------------------------------
+---------------------------ex 15--------------------------------
 
 
 --------------------------- Cererea 1 - OUTER JOIN pe minimum 4 tabele --------------------------------
