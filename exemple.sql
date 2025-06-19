@@ -34,8 +34,8 @@ ORDER BY u.nume, u.prenume;
 
 --------------------------- Cererea 2--------------------------------
 
---Pentru fiecare gen muzical să se afișeze numărul de albume comandate
---și numărul de albume incluse în playlisturi.
+--Pentru fiecare gen muzical sa se afisze numarul de albume comandate
+--si numarul de albume incluse în playlisturi.
 
 
 SELECT gm.gen_id, gm.denumire,
@@ -43,8 +43,8 @@ SELECT gm.gen_id, gm.denumire,
        NVL(albume_playlist.nr_albume, 0) AS numar_albume_playlist,
        DECODE(
            SIGN(NVL(albume_comandate.nr_albume, 0) - NVL(albume_playlist.nr_albume, 0)),
-           1, 'Mai popular în comenzi',
-           0, 'Popularitate egală',
+           1, 'Mai popular in comenzi',
+           0, 'Popularitate egala',
           -1, 'Mai popular în playlisturi'
        ) AS comparatie_popularitate
 FROM gen_muzical gm
@@ -68,8 +68,8 @@ ORDER BY numar_albume_comandate + numar_albume_playlist DESC;
 
 --------------------------- Cererea 3--------------------------------
 
---Afișarea artiștilor care au albume cu rating-ul mediu mai mare decât media rating-urilor tuturor albumelor,
---alături de numărul de albume și numărul de utilizatori care au albume ale artistului în wishlist.
+--Afisarea artistilor care au albume cu rating-ul mediu mai mare decat media rating-urilor tuturor albumelor,
+--alaturi de numarul de albume si numarul de utilizatori care au albume ale artistului în wishlist.
 
 SELECT a.artist_id, a.nume,
        NVL(COUNT(DISTINCT alb.album_id), 0) AS numar_albume,
@@ -90,9 +90,9 @@ ORDER BY rating_mediu DESC, numar_wishlist DESC;
 
 --------------------------- Cererea 4--------------------------------
 
---Afișarea informațiilor despre comenzi cu detalii despre status, vechime,
--- timpul trecut de la plasare și valoarea totală,
--- analizând cât reprezintă costul transportului din total.
+--Afisarea informațiilor despre comenzi cu detalii despre status, vechime,
+-- timpul trecut de la plasare si valoarea totala,
+-- analizand cat reprezinta costul transportului din total.
 
 
 SELECT c.comanda_id,
@@ -100,10 +100,10 @@ SELECT c.comanda_id,
        TO_CHAR(c.data_plasare, 'DD-MON-YYYY') AS data_plasare,
        ROUND(MONTHS_BETWEEN(SYSDATE, c.data_plasare), 1) AS vechime_luni,
        CASE
-           WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 1 THEN 'Comandă recentă'
-           WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 6 THEN 'Comandă din ultimele 6 luni'
-           WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 12 THEN 'Comandă din ultimul an'
-           ELSE 'Comandă veche'
+           WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 1 THEN 'Comanda recenta'
+           WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 6 THEN 'Comanda din ultimele 6 luni'
+           WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 12 THEN 'Comanda din ultimul an'
+           ELSE 'Comanda veche'
        END AS vechime,
        c.status,
        c.cost_total,
@@ -118,8 +118,8 @@ ORDER BY c.data_plasare DESC;
 
 --------------------------- Cererea 5--------------------------------
 
---Afișarea artiștilor și a evenimentelor lor viitoare,cu numărul total de albume, rating mediu
--- și numărul de fani (utilizatori cu albume ale artistului în wishlist).
+--Afisarea artistilor si a evenimentelor lor viitoare,cu numarul total de albume, rating mediu
+-- si numarul de fani (utilizatori cu albume ale artistului în wishlist).
 
 WITH artisti_populari AS (
     SELECT a.artist_id, a.nume, COUNT(DISTINCT alb.album_id) AS nr_albume,
@@ -189,7 +189,7 @@ WHERE EXISTS (
 --Actualizarea nivelului de loialitate pentru utilizatori
 
 --Descriere: Actualizarea nivelului de loialitate pentru utilizatori
--- în funcție de numărul total de comenzi plasate și valoarea acestora.
+-- în funcție de numarul total de comenzi plasate si valoarea acestora.
 
 
 UPDATE loialitate l
@@ -197,7 +197,7 @@ SET nivel = (
     CASE
         WHEN (SELECT COUNT(*) FROM comanda c WHERE c.utilizator_id = l.utilizator_id) >= 5
              OR (SELECT SUM(cost_total) FROM comanda c WHERE c.utilizator_id = l.utilizator_id) > 500
-        THEN 'Platină'
+        THEN 'Platina'
         WHEN (SELECT COUNT(*) FROM comanda c WHERE c.utilizator_id = l.utilizator_id) >= 3
              OR (SELECT SUM(cost_total) FROM comanda c WHERE c.utilizator_id = l.utilizator_id) > 300
         THEN 'Aur'
@@ -215,10 +215,10 @@ WHERE EXISTS (
 
 --------------------------- Operatia 3--------------------------------
 
--- Ștergerea melodiilor din CD-urile personalizate pentru care durata totală depășește un anumit prag
+-- stergerea melodiilor din CD-urile personalizate pentru care durata totala depaseste un anumit prag
 
--- Descriere: Ștergerea melodiilor care au cea mai mică durată din CD-urile personalizate pentru care durata totală a
--- melodiilor depășește 60 de minute (3600 secunde).
+-- Descriere: stergerea melodiilor care au cea mai mica durata din CD-urile personalizate pentru care durata totala a
+-- melodiilor depaseste 60 de minute (3600 secunde).
 
 DELETE FROM playlist p
 WHERE p.melodie_id IN (
@@ -244,3 +244,127 @@ AND p.cd_pers_id IN (
     ) > 3600
 )
 AND ROWNUM = 1;
+
+
+
+
+
+--------------------------- ex 14--------------------------------
+
+-- Crearea unei unei vizualizari complexe care afiseaza informatii despre
+-- utilizatori, comenzile lorsi albumele din wishlist
+
+CREATE OR REPLACE VIEW vizualizare_utilizatori_completa AS
+SELECT
+    u.utilizator_id,
+    u.nume || ' ' || u.prenume AS nume_complet,
+    u.email,
+    u.oras || ', ' || u.judet AS locatie,
+    COUNT(DISTINCT c.comanda_id) AS numar_comenzi,
+    NVL(SUM(c.cost_total), 0) AS valoare_totala_comenzi,
+    l.nivel AS nivel_loialitate,
+    l.puncte AS puncte_loialitate,
+    COUNT(DISTINCT wa.album_id) AS albume_in_wishlist,
+    COUNT(DISTINCT cp.cd_pers_id) AS cd_personalizate_create,
+    ROUND(AVG(r.rating), 2) AS rating_mediu_recenzii,
+    COUNT(DISTINCT r.recenzie_id) AS numar_recenzii
+FROM utilizator u
+LEFT JOIN comanda c ON u.utilizator_id = c.utilizator_id
+LEFT JOIN loialitate l ON u.utilizator_id = l.utilizator_id
+LEFT JOIN wishlist w ON u.utilizator_id = w.utilizator_id
+LEFT JOIN wishlist_album wa ON w.wishlist_id = wa.wishlist_id
+LEFT JOIN cd_personalizat cp ON u.utilizator_id = cp.utilizator_id
+LEFT JOIN recenzie r ON u.utilizator_id = r.utilizator_id
+GROUP BY u.utilizator_id, u.nume, u.prenume, u.email, u.oras, u.judet,
+         l.nivel, l.puncte;
+
+--operatie permisa
+SELECT nume_complet, nivel_loialitate, numar_comenzi, valoare_totala_comenzi
+FROM vizualizare_utilizatori_completa;
+
+--operatie nepermisa
+UPDATE vizualizare_utilizatori_completa
+SET nivel_loialitate = 'Platina'
+WHERE utilizator_id = 1;
+
+
+
+
+
+
+--------------------------- EXERCIȚIUL 15 --------------------------------
+
+
+--------------------------- Cererea 1 - OUTER JOIN pe minimum 4 tabele --------------------------------
+-- Afisarea tuturor artistilor cu informații despre ei si evenimentele lor
+
+
+
+SELECT
+    a.artist_id,
+    a.nume AS nume_artist,
+    a.biografie,
+    e.nume AS nume_eveniment,
+    e.data AS data_eveniment,
+    e.locatie,
+    b.pret AS pret_bilet
+FROM artist a
+LEFT OUTER JOIN lineup l ON a.artist_id = l.artist_id
+LEFT OUTER JOIN eveniment e ON l.eveniment_id = e.eveniment_id
+LEFT OUTER JOIN bilet b ON e.eveniment_id = b.eveniment_id
+ORDER BY a.nume, e.data;
+
+
+
+
+--------------------------- Cererea 2 - Operația DIVISION --------------------------------
+-- Gasirea utilizatorilor care NU au comandat niciun album Hip-Hop
+
+
+SELECT u.utilizator_id, u.nume, u.prenume
+FROM utilizator u
+WHERE EXISTS (
+    -- verifccam ca utilizatorul sa fi facut macar o comanda
+    SELECT 1
+    FROM comanda c
+    WHERE c.utilizator_id = u.utilizator_id
+)
+AND NOT EXISTS (
+    -- NU trebuie sa existe nicio comanda cu genul albumului hip-hop
+    SELECT 1
+    FROM comanda c
+    JOIN comanda_albume ca ON c.comanda_id = ca.comanda_id
+    JOIN album alb ON ca.album_id = alb.album_id
+    JOIN album_gen_muzical agm ON alb.album_id = agm.album_id
+    JOIN gen_muzical gm ON agm.gen_id = gm.gen_id
+    WHERE c.utilizator_id = u.utilizator_id
+    AND gm.denumire = 'Hip-Hop'
+);
+
+
+--------------------------- Cererea 3-Analiza TOP-N --------------------------------
+
+-- Top 3 albume cu cele mai mari vanzari
+
+SELECT * FROM (
+    SELECT
+        alb.album_id,
+        alb.titlu,
+        art.nume AS artist,
+        alb.pret,
+        SUM(ca.cantitate) AS total_vandut,
+        COUNT(DISTINCT ca.comanda_id) AS numar_comenzi_diferite,
+        RANK() OVER (ORDER BY SUM(ca.cantitate) DESC) AS ranking_vanzari
+    FROM album alb
+    JOIN artist art ON alb.artist_id = art.artist_id
+    JOIN comanda_albume ca ON alb.album_id = ca.album_id
+    JOIN comanda c ON ca.comanda_id = c.comanda_id
+    WHERE c.status IN ('Livrata', 'Expediata', 'Procesata')  --excludem cmenzile anulate
+    GROUP BY alb.album_id, alb.titlu, art.nume, alb.pret
+    ORDER BY total_vandut DESC
+)
+WHERE ROWNUM <= 3;
+
+
+
+

@@ -1,4 +1,4 @@
---ex 10--
+--------------------------- ex 10--------------------------------
 
 ----crearea secventelor----
 
@@ -94,9 +94,9 @@ NOCYCLE;
 
 
 
---ex 11--
+--------------------------- ex 11--------------------------------
 
-----------Creare tabele principale----------
+----------creare tabele principale----------
 
 DROP TABLE PLAYLIST CASCADE CONSTRAINTS;
 DROP TABLE LINEUP CASCADE CONSTRAINTS;
@@ -267,7 +267,7 @@ CREATE TABLE BILET (
     FOREIGN KEY (eveniment_id) REFERENCES EVENIMENT(eveniment_id)
 );
 
-----------Creare tabele asociative----------
+----------creare tabele asociative----------
 
 CREATE TABLE ALBUM_GEN_MUZICAL (
     album_id NUMBER,
@@ -401,7 +401,7 @@ VALUES (seq_artist.NEXTVAL, 'Metallica', 'Formație americană de heavy metal, f
 
 
 
-----------Inserarea datelor în tabela GEN_MUZICAL----------
+----------inserarea datelor in tabela GEN_MUZICAL----------
 INSERT INTO GEN_MUZICAL (gen_id, denumire, descriere)
 VALUES (seq_genmus.NEXTVAL, 'Rock', 'Gen muzical popular caracterizat prin utilizarea chitării electrice și a tobelor.');
 
@@ -420,25 +420,25 @@ VALUES (seq_genmus.NEXTVAL, 'Heavy-Metal','Gen muzical intens caracterizat prin 
 
 
 
-----------Inserarea datelor în tabela ALBUM----------
+----------inserarea datelor in tabela ALBUM----------
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
 VALUES(8, 'Hot Space', 1, TO_DATE('1982-05-21', 'YYYY-MM-DD'), 29.99, 40, 3.5, 'Album funk/pop', 11, 'CD');
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
-VALUES (1, 'To Pimp a Butterfly', 2, TO_DATE('2015-03-15', 'YYYY-MM-DD'), 49.99, 100, 4.8, 'Album hip-hop revolutionar',16, 'CD');
+VALUES (1, 'To Pimp a Butterfly', 3, TO_DATE('2015-03-15', 'YYYY-MM-DD'), 49.99, 100, 4.8, 'Album hip-hop revolutionar',16, 'CD');
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
-VALUES (2, 'good kid, m.A.A.d city', 2, TO_DATE('2012-10-22', 'YYYY-MM-DD'), 44.99, 75, 4.7,'Album conceptual despre viata in Compton', 12, 'CD');
+VALUES (2, 'good kid, m.A.A.d city', 3, TO_DATE('2012-10-22', 'YYYY-MM-DD'), 44.99, 75, 4.7,'Album conceptual despre viata in Compton', 12, 'CD');
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
-VALUES (3, 'DAMN.', 2, TO_DATE('2017-04-14', 'YYYY-MM-DD'), 39.99, 150, 4.6, 'Album castigator premiul Pulitzer', 14, 'CD');
+VALUES (3, 'DAMN.', 3, TO_DATE('2017-04-14', 'YYYY-MM-DD'), 39.99, 150, 4.6, 'Album castigator premiul Pulitzer', 14, 'CD');
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
-VALUES (4, 'Folklore', 3, TO_DATE('2020-07-24', 'YYYY-MM-DD'), 34.99, 200, 4.5, 'Album indie folk', 16, 'DIGITAL');
+VALUES (4, 'Folklore', 2, TO_DATE('2020-07-24', 'YYYY-MM-DD'), 34.99, 200, 4.5, 'Album indie folk', 16, 'DIGITAL');
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
-VALUES (5, 'Evermore', 3, TO_DATE('2020-12-11', 'YYYY-MM-DD'), 34.99, 180, 4.4, 'Album sora pentru Folklore', 15,'DIGITAL');
+VALUES (5, 'Evermore', 2, TO_DATE('2020-12-11', 'YYYY-MM-DD'), 34.99, 180, 4.4, 'Album sora pentru Folklore', 15,'DIGITAL');
 
 INSERT INTO ALBUM (album_id, titlu, artist_id, data_lansare, pret, stoc, rating, descriere, numar_piese, format)
 VALUES(6, 'Random Access Memories', 4, TO_DATE('2013-05-17', 'YYYY-MM-DD'), 54.99, 90, 4.9, 'Album dance electronic', 13, 'CD');
@@ -456,7 +456,7 @@ VALUES (10, 'Ride the Lightning', 5, TO_DATE('1984-07-27', 'YYYY-MM-DD'), 44.99,
 
 
 
-----------Inserarea datelor în tabela MELODIE----------
+----------iserarea datelor in tabela MELODIE----------
 
 -- Folklore
 INSERT INTO MELODIE (melodie_id, titlu, album_id, durata, pret_individual) VALUES (seq_melodie.NEXTVAL, 'cardigan', 4, 239, 3.99);
@@ -517,7 +517,7 @@ INSERT INTO MELODIE (melodie_id, titlu, album_id, durata, pret_individual) VALUE
 INSERT INTO MELODIE (melodie_id, titlu, album_id, durata, pret_individual) VALUES (seq_melodie.NEXTVAL, 'Staying Power', 8, 246, 3.99);
 
 
-----------Inserarea datelor în tabela CD PERSONALIZAT----------
+----------inserarea datelor in tabela CD PERSONALIZAT----------
 
 INSERT INTO CD_PERSONALIZAT (cd_pers_id, utilizator_id, titlu, data_creare, pret_total, numar_piese)
 VALUES (seq_cd_pers.NEXTVAL, 1, 'Colecția Mea Rock', TO_DATE('2022-05-10', 'YYYY-MM-DD'), 24.95, 5);
@@ -538,7 +538,7 @@ VALUES (seq_cd_pers.NEXTVAL, 5, 'Muzica de cartier', TO_DATE('2024-05-14', 'YYYY
 
 
 
-----------Inserarea datelor în tabela COMANDA----------
+----------inserarea datelor in tabela COMANDA----------
 
 INSERT INTO COMANDA (comanda_id, utilizator_id, data_plasare, status, adresa_livrare, metoda_plata, cost_total, cost_transport, tip_comanda)
 VALUES (seq_comanda.NEXTVAL, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 'Livrată', 'Str. Lalelelor nr. 23, Roman, Neamt, 617466', 'Card', 129.93, 15.00, 'MIXT');
@@ -559,7 +559,7 @@ VALUES (seq_comanda.NEXTVAL, 5, TO_DATE('2025-05-01', 'YYYY-MM-DD'), 'Anulată',
 
 
 
-----------Inserarea datelor în tabela RECENZIE----------
+----------inserarea datelor in tabela RECENZIE----------
 
 INSERT INTO RECENZIE (recenzie_id, utilizator_id, album_id, rating, comentariu, data_adaugare)
 VALUES (seq_recenzie.NEXTVAL, 1, 3, 5, 'Album extraordinar! Damn. este capodoperă.', TO_DATE('2024-05-06', 'YYYY-MM-DD'));
@@ -578,7 +578,7 @@ VALUES (seq_recenzie.NEXTVAL, 5, 6, 4, 'Daft Punk este un artist complet. Instan
 
 
 
-----------Inserarea datelor în tabela LOIALITATE----------
+----------iserarea datelor in tabela LOIALITATE----------
 
 INSERT INTO LOIALITATE (loialitate_id, utilizator_id, puncte, nivel, beneficii)
 VALUES (1, 1, 500, 'Argint', '10% reducere la transportul comenzilor');
@@ -598,7 +598,7 @@ VALUES (5, 5, 100, 'Bronz', '5% reducere la transportul comenzilor');
 
 
 
-----------Inserarea datelor în tabela WISHLIST----------
+----------inserarea datelor in tabela WISHLIST----------
 
 INSERT INTO WISHLIST (wishlist_id, utilizator_id)
 VALUES (seq_wishlist.NEXTVAL, 1);
@@ -617,7 +617,7 @@ VALUES (seq_wishlist.NEXTVAL, 5);
 
 
 
-----------Inserarea datelor în tabela EVENIMENT----------
+----------inserarea datelor în tabela EVENIMENT----------
 
 INSERT INTO EVENIMENT (eveniment_id, nume, data, locatie, capacitate, descriere)
 VALUES (seq_eveniment.NEXTVAL, 'Old rock', TO_DATE('2025-05-11', 'YYYY-MM-DD'), 'Sala Palatului, București', 4000, 'Concert tribut pentru legendara trupă Queen');
@@ -635,7 +635,7 @@ INSERT INTO EVENIMENT (eveniment_id, nume, data, locatie, capacitate, descriere)
 VALUES (seq_eveniment.NEXTVAL, 'Electronic Dance Night', TO_DATE('2024-10-31', 'YYYY-MM-DD'), 'Berăria H, București', 2000, 'Noapte de muzică electronică cu DJ celebri');
 
 
-----------Inserarea datelor în tabela Bilet----------
+----------inserarea datelor in tabela Bilet----------
 
 INSERT INTO BILET (bilet_id, eveniment_id, pret)
 VALUES (seq_bilet.NEXTVAL, 121, 150.00);
@@ -656,7 +656,7 @@ VALUES (seq_bilet.NEXTVAL, 165, 120.00);
 
 
 
-----------Inserarea datelor în tabela ALBUM_GEN_MUZICAL----------
+----------inserarea datelor in tabela ALBUM_GEN_MUZICAL----------
 
 INSERT INTO ALBUM_GEN_MUZICAL (album_id, gen_id) VALUES (1, 150); -- To Pimp a Butterfly - Hip-Hop
 INSERT INTO ALBUM_GEN_MUZICAL (album_id, gen_id) VALUES (2, 150); -- good kid, m.A.A.d city - Hip-Hop
@@ -673,7 +673,7 @@ INSERT INTO ALBUM_GEN_MUZICAL (album_id, gen_id) VALUES (6, 100); -- Random Acce
 
 
 
-----------Inserarea datelor în tabela WISHLIST_ALBUM----------
+----------inserarea datelor in tabela WISHLIST_ALBUM----------
 
 INSERT INTO WISHLIST_ALBUM (wishlist_id, album_id) VALUES (500, 1); -- Utilizatorul 1 - To Pimp a Butterfly
 INSERT INTO WISHLIST_ALBUM (wishlist_id, album_id) VALUES (500, 6); -- Utilizatorul 1 - Random Access Memories
@@ -688,7 +688,7 @@ INSERT INTO WISHLIST_ALBUM (wishlist_id, album_id) VALUES (650, 10); -- Utilizat
 
 
 
-----------Inserarea datelor în tabela COMANDA_ALBUME----------
+----------inserarea datelor in tabela COMANDA_ALBUME----------
 
 INSERT INTO COMANDA_ALBUME (comanda_id, album_id, cantitate) VALUES (1000, 1, 1);
 INSERT INTO COMANDA_ALBUME (comanda_id, album_id, cantitate) VALUES (1000, 6, 2);
@@ -708,7 +708,7 @@ INSERT INTO COMANDA_ALBUME (comanda_id, album_id, cantitate) VALUES (1001, 1, 1)
 
 
 
-----------Inserarea datelor în tabela COMANDA_CD_PERSONALIZAT----------
+----------inserarea datelor in tabela COMANDA_CD_PERSONALIZAT----------
 
 INSERT INTO COMANDA_CD_PERSONALIZAT (comanda_id, cd_pers_id, cantitate)
 VALUES (1000, 1, 1); -- Fernando comandă "Colecția Mea Rock"
@@ -727,7 +727,7 @@ VALUES (1004, 3, 1); -- Cosmin comandă "Cele Mai Bune Balade"
 
 
 
-----------Inserarea datelor în tabela PLAYLIST----------
+----------inserarea datelor in tabela PLAYLIST----------
 
 INSERT INTO PLAYLIST (playlist_id, melodie_id, cd_pers_id) VALUES (seq_playlist.NEXTVAL, 5350, 1); -- Master of Puppets
 INSERT INTO PLAYLIST (playlist_id, melodie_id, cd_pers_id) VALUES (seq_playlist.NEXTVAL, 5450, 1); -- Fade to Black
@@ -770,7 +770,7 @@ INSERT INTO PLAYLIST (playlist_id, melodie_id, cd_pers_id) VALUES (seq_playlist.
 
 
 
-----------Inserarea datelor în tabela LINEUP----------
+----------inserarea datelor in tabela LINEUP----------
 
 INSERT INTO LINEUP (lineup_id, artist_id, eveniment_id) VALUES (1, 1, 121);  -- Queen la "Old rock"
 INSERT INTO LINEUP (lineup_id, artist_id, eveniment_id) VALUES (2, 2, 132);  -- Taylor Swift la "Youth Festival"
