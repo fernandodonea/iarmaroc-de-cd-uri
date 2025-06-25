@@ -2,23 +2,23 @@
 --------------------------- ex 12--------------------------------
 
 
---------------------------- Cererea 1--------------------------------
+---------------------------Cererea1----------------------------
 
 ---Care sunt utilizatorii care au comandat albumele personalizate care includ
--- melodii din cele mai multe albume diferite.
+--melodii din cele mai multe albume diferite.
 
 WITH albume_per_cd AS (
     SELECT cp.cd_pers_id, cp.utilizator_id, cp.titlu AS titlu_cd,
-           COUNT(DISTINCT m.album_id) AS numar_albume_diferite
+           COUNT(DISTINCT m.album_id) AS numar_albume_diferite --numaram cate albume diferite sunt in fiecare cd pers
     FROM cd_personalizat cp
     JOIN playlist p ON cp.cd_pers_id = p.cd_pers_id
     JOIN melodie m ON p.melodie_id = m.melodie_id
-    GROUP BY cp.cd_pers_id, cp.utilizator_id, cp.titlu
-),
+    GROUP BY cp.cd_pers_id, cp.utilizator_id, cp.titlu --grupam rezultatele dupa cd pers
+),--pentru fiecare cd personalizat stim din cate albume diferite contine melodii
 max_albume AS (
     SELECT MAX(numar_albume_diferite) AS max_albume_diferite
     FROM albume_per_cd
-)
+) --aflam numarul maxim de albume diferite
 SELECT u.utilizator_id, u.nume, u.prenume,
        apc.cd_pers_id, apc.titlu_cd, apc.numar_albume_diferite,
        (SELECT COUNT(DISTINCT album_id)
@@ -27,7 +27,7 @@ SELECT u.utilizator_id, u.nume, u.prenume,
         WHERE p.cd_pers_id = apc.cd_pers_id) AS total_albume
 FROM utilizator u
 JOIN albume_per_cd apc ON u.utilizator_id = apc.utilizator_id
-JOIN max_albume ma ON apc.numar_albume_diferite = ma.max_albume_diferite
+JOIN max_albume ma ON apc.numar_albume_diferite = ma.max_albume_diferite --filtram doar cd-urile cu nr maxim
 ORDER BY u.nume, u.prenume;
 
 
@@ -35,17 +35,17 @@ ORDER BY u.nume, u.prenume;
 --------------------------- Cererea 2--------------------------------
 
 --Pentru fiecare gen muzical sa se afisze numarul de albume comandate
---si numarul de albume incluse în playlisturi.
+--si numarul de albume incluse In playlisturi.
 
 
 SELECT gm.gen_id, gm.denumire,
-       NVL(albume_comandate.nr_albume, 0) AS numar_albume_comandate,
-       NVL(albume_playlist.nr_albume, 0) AS numar_albume_playlist,
+       NVL(albume_comandate.nr_albume, 0) AS numar_albume_comandate, --daca nu gasim albume comandate
+       NVL(albume_playlist.nr_albume, 0) AS numar_albume_playlist, -- daca nu gasim albume in playlist-uri
        DECODE(
            SIGN(NVL(albume_comandate.nr_albume, 0) - NVL(albume_playlist.nr_albume, 0)),
            1, 'Mai popular in comenzi',
            0, 'Popularitate egala',
-          -1, 'Mai popular în playlisturi'
+          -1, 'Mai popular In playlisturi'
        ) AS comparatie_popularitate
 FROM gen_muzical gm
 LEFT JOIN (
@@ -53,7 +53,7 @@ LEFT JOIN (
     FROM album_gen_muzical agm
     JOIN comanda_albume ca ON agm.album_id = ca.album_id
     GROUP BY agm.gen_id
-) albume_comandate ON gm.gen_id = albume_comandate.gen_id
+) albume_comandate ON gm.gen_id = albume_comandate.gen_id --aflam albumele comandantate grupate dupa gen
 LEFT JOIN (
     SELECT agm.gen_id, COUNT(DISTINCT m.album_id) AS nr_albume
     FROM album_gen_muzical agm
@@ -61,7 +61,7 @@ LEFT JOIN (
     JOIN melodie m ON a.album_id = m.album_id
     JOIN playlist p ON m.melodie_id = p.melodie_id
     GROUP BY agm.gen_id
-) albume_playlist ON gm.gen_id = albume_playlist.gen_id
+) albume_playlist ON gm.gen_id = albume_playlist.gen_id --aflam albumele din playlisturi
 ORDER BY numar_albume_comandate + numar_albume_playlist DESC;
 
 
@@ -69,11 +69,11 @@ ORDER BY numar_albume_comandate + numar_albume_playlist DESC;
 --------------------------- Cererea 3--------------------------------
 
 --Afisarea artistilor care au albume cu rating-ul mediu mai mare decat media rating-urilor tuturor albumelor,
---alaturi de numarul de albume si numarul de utilizatori care au albume ale artistului în wishlist.
+--alaturi de numarul de albume si numarul de utilizatori care au albume ale artistului In wishlist.
 
 SELECT a.artist_id, a.nume,
-       NVL(COUNT(DISTINCT alb.album_id), 0) AS numar_albume,
-       AVG(alb.rating) AS rating_mediu,
+       NVL(COUNT(DISTINCT alb.album_id), 0) AS numar_albume, --cate albume are artistul
+       AVG(alb.rating) AS rating_mediu, --ratingul mediu al albumelor
        DECODE(COUNT(DISTINCT wa.wishlist_id), 0, 'Niciun wishlist',
               TO_CHAR(COUNT(DISTINCT wa.wishlist_id))) AS numar_wishlist
 FROM artist a
@@ -83,22 +83,22 @@ LEFT JOIN (SELECT wa.album_id, w.wishlist_id
            JOIN wishlist w ON wa.wishlist_id = w.wishlist_id) wa
      ON alb.album_id = wa.album_id
 GROUP BY a.artist_id, a.nume
-HAVING AVG(alb.rating) > (SELECT AVG(rating) FROM album)
+HAVING AVG(alb.rating) > (SELECT AVG(rating) FROM album) --media artistului > media generala a albumelor
 ORDER BY rating_mediu DESC, numar_wishlist DESC;
 
 
 
 --------------------------- Cererea 4--------------------------------
 
---Afisarea informațiilor despre comenzi cu detalii despre status, vechime,
+--Afisarea informatiilor despre comenzi cu detalii despre status, vechime,
 -- timpul trecut de la plasare si valoarea totala,
 -- analizand cat reprezinta costul transportului din total.
 
 
 SELECT c.comanda_id,
-       UPPER(u.nume) || ' ' || INITCAP(u.prenume) AS client,
+       UPPER(u.nume) || ' ' || INITCAP(u.prenume) AS client, --initcap litera mare
        TO_CHAR(c.data_plasare, 'DD-MON-YYYY') AS data_plasare,
-       ROUND(MONTHS_BETWEEN(SYSDATE, c.data_plasare), 1) AS vechime_luni,
+       ROUND(MONTHS_BETWEEN(SYSDATE, c.data_plasare), 1) AS vechime_luni, --diferenta in luni
        CASE
            WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 1 THEN 'Comanda recenta'
            WHEN MONTHS_BETWEEN(SYSDATE, c.data_plasare) < 6 THEN 'Comanda din ultimele 6 luni'
@@ -109,7 +109,7 @@ SELECT c.comanda_id,
        c.cost_total,
        c.cost_transport,
        ROUND((c.cost_transport / c.cost_total) * 100, 2) || '%' AS procent_transport,
-       TO_CHAR(ADD_MONTHS(c.data_plasare, 12), 'DD-MON-YYYY') AS data_limita_garantie
+       TO_CHAR(ADD_MONTHS(c.data_plasare, 12), 'DD-MON-YYYY') AS data_limita_garantie --adaugam garantie 12 luni de la data plasarii
 FROM comanda c
 JOIN utilizator u ON c.utilizator_id = u.UTILIZATOR_ID
 ORDER BY c.data_plasare DESC;
@@ -119,17 +119,18 @@ ORDER BY c.data_plasare DESC;
 --------------------------- Cererea 5--------------------------------
 
 --Afisarea artistilor si a evenimentelor lor viitoare,cu numarul total de albume, rating mediu
--- si numarul de fani (utilizatori cu albume ale artistului în wishlist).
+-- si numarul de fani (utilizatori cu albume ale artistului In wishlist).
 
 WITH artisti_populari AS (
-    SELECT a.artist_id, a.nume, COUNT(DISTINCT alb.album_id) AS nr_albume,
+    SELECT a.artist_id, a.nume, COUNT(DISTINCT alb.album_id) AS nr_albume, --cate albume are
            AVG(alb.rating) AS rating_mediu
     FROM artist a
     JOIN album alb ON a.artist_id = alb.artist_id
-    GROUP BY a.artist_id, a.nume
+    GROUP BY a.artist_id, a.nume --o linie dupa artitst
 ),
 fani_artist AS (
-    SELECT a.artist_id, COUNT(DISTINCT w.utilizator_id) AS nr_fani
+    SELECT a.artist_id,
+           COUNT(DISTINCT w.utilizator_id) AS nr_fani --cati utilizatori distincti au albumul in wishlist
     FROM artist a
     JOIN album alb ON a.artist_id = alb.artist_id
     JOIN wishlist_album wa ON alb.album_id = wa.album_id
@@ -137,10 +138,10 @@ fani_artist AS (
     GROUP BY a.artist_id
 )
 SELECT ap.artist_id, ap.nume, ap.nr_albume, ap.rating_mediu,
-       NVL(fa.nr_fani, 0) AS numar_fani,
+       NVL(fa.nr_fani, 0) AS numar_fani, --daca nu ar fani
        e.eveniment_id, e.nume AS nume_eveniment, e.data, e.locatie, e.capacitate
 FROM artisti_populari ap
-LEFT JOIN fani_artist fa ON ap.artist_id = fa.artist_id
+LEFT JOIN fani_artist fa ON ap.artist_id = fa.artist_id --ia numarul de fani
 JOIN lineup l ON ap.artist_id = l.artist_id
 JOIN eveniment e ON l.eveniment_id = e.eveniment_id
 ORDER BY e.data, ap.rating_mediu DESC;
@@ -168,7 +169,7 @@ ORDER BY e.data, ap.rating_mediu DESC;
 
 
 UPDATE album a
-SET rating = (
+SET rating = ( --calculam ratingul mediu
     SELECT AVG(r.rating)
     FROM recenzie r
     WHERE r.album_id = a.album_id
@@ -177,7 +178,7 @@ SET rating = (
 WHERE EXISTS (
     SELECT 1
     FROM recenzie r
-    WHERE r.album_id = a.album_id
+    WHERE r.album_id = a.album_id --actualizam doar albumele care au recenzii
 );
 
 
@@ -187,7 +188,7 @@ WHERE EXISTS (
 --Actualizarea nivelului de loialitate pentru utilizatori
 
 --Descriere: Actualizarea nivelului de loialitate pentru utilizatori
--- în funcție de numarul total de comenzi plasate si valoarea acestora.
+-- In functie de numarul total de comenzi plasate si valoarea acestora.
 
 
 UPDATE loialitate l
@@ -229,7 +230,7 @@ WHERE p.melodie_id IN (
         FROM playlist p3
         JOIN melodie m2 ON p3.melodie_id = m2.melodie_id
         WHERE p3.cd_pers_id = p.cd_pers_id
-    )
+    )--gasim melodia cu durata minima
 )
 AND p.cd_pers_id IN (
     SELECT cd.cd_pers_id
@@ -239,9 +240,9 @@ AND p.cd_pers_id IN (
         FROM playlist p4
         JOIN melodie m3 ON p4.melodie_id = m3.melodie_id
         WHERE p4.cd_pers_id = cd.cd_pers_id
-    ) > 3600
+    ) > 3600 --stergem melodii doar din albume cu durata > 1 ora
 )
-AND ROWNUM = 1;
+AND ROWNUM = 1; --stergem doar o melodie
 
 
 
@@ -304,7 +305,7 @@ WHERE utilizator_id = 1;
 
 
 --------------------------- Cererea 1 - OUTER JOIN pe minimum 4 tabele --------------------------------
--- Afisarea tuturor artistilor cu informații despre ei si evenimentele lor
+-- Afisarea tuturor artistilor cu informatii despre ei si evenimentele lor
 
 
 
@@ -317,7 +318,7 @@ SELECT
     e.locatie,
     b.pret AS pret_bilet
 FROM artist a
-LEFT OUTER JOIN lineup l ON a.artist_id = l.artist_id
+LEFT OUTER JOIN lineup l ON a.artist_id = l.artist_id --outer join  afisam toti artistii, chiar daca nu au evenimente
 LEFT OUTER JOIN eveniment e ON l.eveniment_id = e.eveniment_id
 LEFT OUTER JOIN bilet b ON e.eveniment_id = b.eveniment_id
 ORDER BY a.nume, e.data;
@@ -325,7 +326,7 @@ ORDER BY a.nume, e.data;
 
 
 
---------------------------- Cererea 2 - Operația DIVISION --------------------------------
+--------------------------- Cererea 2 - Operatia DIVISION --------------------------------
 -- Gasirea utilizatorilor care NU au comandat niciun album Hip-Hop
 
 
@@ -366,6 +367,7 @@ FROM (
     JOIN comanda_albume ca ON alb.album_id = ca.album_id
     GROUP BY alb.album_id, alb.titlu, art.nume
     ORDER BY SUM(ca.cantitate) DESC
+    --calcualm pentru fiecare album vanzarile
 )
 WHERE ROWNUM <= 3;
 
